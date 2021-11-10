@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    key    = "website.json"
+    key    = "drone-ci-slackbot.json"
     region = "eu-west-1"
   }
 
