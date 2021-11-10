@@ -151,9 +151,9 @@ raw_jobs = {
     "bundle deployment package": {
         "image": images["alpine"],
         "environment": build_variables,
-        "depends_on": ["build app", "checksum kelly lambda layer"],
+        "depends_on": ["checksum dependencies lambda layer"],
         "commands": [
-            "mkdir -p package/app
+            "mkdir -p package/app",
             "cp -r infrastructure package/infrastructure",
             "cp app/.layer-zip-object-name package/app/.layer-zip-object-name",
             "tar -zcf package.tgz package",
@@ -191,7 +191,7 @@ raw_jobs = {
             'echo "$WORKSPACE" > workspace.tmp',
             "cd package/infrastructure",
             'if [ "$DRONE_BUILD_PARENT" -gt 0 ]; then build_number="$DRONE_BUILD_PARENT"; else build_number="$DRONE_BUILD_NUMBER"; fi',
-            'export FUNCTION_KEY="$DRONE_REPO_NAME/kelly-function/$build_number.zip"',
+            'export FUNCTION_KEY="$DRONE_REPO_NAME/function/$build_number.zip"',
             'export LAYER_KEY="$(cat ../app/.layer-zip-object-name)"',
             "envsubst < terraform.tfvars.tpl > terraform.tfvars",
         ],
@@ -258,7 +258,6 @@ validate = extend_default(
         "trigger": {"event": ["push"]},
         "steps": [
             jobs["audit app node modules"],
-            jobs["audit node modules"],
             jobs["install app node modules"],
             jobs["lint javascript"],
             jobs["check drone config formatting"],
@@ -276,7 +275,6 @@ build = extend_default(
         "depends_on": ["validate"],
         "steps": [
             jobs["install app node modules"],
-            jobs["build app"],
             jobs["checksum dependencies lambda layer"],
             jobs["build dependencies lambda layer"],
             jobs["upload dependencies lambda layer"],
