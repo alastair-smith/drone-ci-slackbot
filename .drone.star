@@ -77,6 +77,11 @@ raw_jobs = {
         "depends_on": ["install app node modules"],
         "commands": ["cd app", "npm run linter"],
     },
+    "unit tests": {
+        "image": images["nodejs"],
+        "depends_on": ["install app node modules"],
+        "commands": ["cd app", "npm test"],
+    },
     "validate terraform": {
         "image": images["terraform"],
         "commands": [
@@ -260,6 +265,7 @@ validate = extend_default(
             jobs["audit app node modules"],
             jobs["install app node modules"],
             jobs["lint javascript"],
+            jobs["unit tests"],
             jobs["check drone config formatting"],
             jobs["spellcheck markdown files"],
             jobs["validate terraform"],
