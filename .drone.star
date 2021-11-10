@@ -149,7 +149,7 @@ raw_jobs = {
             "cd app",
             'FUNCTION_ZIP_OBJECT_NAME="$DRONE_REPO_NAME/function/$DRONE_BUILD_NUMBER.zip"',
             "yum install -y zip",
-            "cat .zipignore | tr '\r\n' ' ' | xargs zip -r function.zip . -x",
+            "zip -r function.zip src",
             'aws s3api put-object --bucket "$PACKAGE_BUCKET" --key "$FUNCTION_ZIP_OBJECT_NAME" --body function.zip',
         ],
     },
